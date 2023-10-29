@@ -8,6 +8,7 @@ FILENAME = "itu.json"
 INIT_STRUCTURE = {"courses":{},
                   "canteen":"https://itustudent.itu.dk/Campus-Life/Student-Life/Canteen-Menu"}
 
+
 def get_json() -> dict:
     with open(FILENAME, "r") as f:
         data = json.load(f)
@@ -34,7 +35,6 @@ def learnit(args) -> str:
         except FileNotFoundError:
             return "The config file hasn't been created yet. Use itu init to create it."
         
-
     elif args.delete:
         try:
             data = get_json()
@@ -60,8 +60,7 @@ def learnit(args) -> str:
         
         except KeyError:
             return f"The course '{course}' hasn't been added to the config file yet."
-
-        
+ 
 
 def init() -> str:
 
@@ -69,8 +68,6 @@ def init() -> str:
         return "The config file has already been created previously."
     set_json(INIT_STRUCTURE)
     return "Config file created successfully."
-
-
 
 
 def git(args) -> str:
@@ -97,9 +94,7 @@ def git(args) -> str:
             return "The config file hasn't been created yet. Use itu init to create it."
 
         except KeyError:
-            return "Your account hasn't been added yet to the config file. Use itu git -a UserName to add it."
-
-
+            return "Your account hasn't been added yet to the config file. Use itu git -a to add it."
 
 
 def canteen(args) -> str:
@@ -110,8 +105,6 @@ def canteen(args) -> str:
         return "Opening canteen menu..."
     except FileNotFoundError:
         return "The config file hasn't been created yet. Use itu init to create it."
-
-
 
 
 parser = argparse.ArgumentParser(description=ITU_DESCRIPTION, prog="itu", epilog="thanks for using this shit")
@@ -137,7 +130,6 @@ git_parse.add_argument("-a", "--add", action="store_true")
 git_parse.add_argument("-d", "--delete", action="store_true")
 
 
-
 args = parser.parse_args()
 
 match args.subcommand:
@@ -149,6 +141,3 @@ match args.subcommand:
         print(git(args))
     case "canteen":
         print(canteen(args))
-
-
-print(args)
