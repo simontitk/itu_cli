@@ -79,11 +79,11 @@ def git(args) -> str:
             data["git"] = username
             set_json(data)
             return f"'{username}' saved as GitHub username."
+            
         except FileNotFoundError:
             return "The config file hasn't been created yet. Use itu init to create it."
         
     else:
-
         try:
             data = get_json()
             username = data["git"]
@@ -97,47 +97,50 @@ def git(args) -> str:
             return "Your account hasn't been added yet to the config file. Use itu git -a to add it."
 
 
-def canteen(args) -> str:
+def canteen() -> str:
+
     try:
         data = get_json()
         canteen_url = data["canteen"]
         webbrowser.open(canteen_url)
         return "Opening canteen menu..."
+        
     except FileNotFoundError:
         return "The config file hasn't been created yet. Use itu init to create it."
 
+if __name__ == "__main__":
 
-parser = argparse.ArgumentParser(description=ITU_DESCRIPTION, prog="itu", epilog="thanks for using this shit")
+    parser = argparse.ArgumentParser(description=ITU_DESCRIPTION, prog="itu")
 
-subparsers = parser.add_subparsers(title="Subcommands", dest="subcommand")
+    subparsers = parser.add_subparsers(title="Subcommands", dest="subcommand")
 
-init_parse = subparsers.add_parser(name="init",
-                                   help="Creates a .json file for storing your courses.")
+    init_parse = subparsers.add_parser(name="init",
+                                    help="Creates a .json file for storing your courses.")
 
-canteen_parse = subparsers.add_parser(name="canteen",
-                                      help="Redirects to the canteen menu.")
+    canteen_parse = subparsers.add_parser(name="canteen",
+                                        help="Redirects to the canteen menu.")
 
-learnit_parse = subparsers.add_parser(name="learnit",
-                             help="Manages your LearnIT courses.")
-learnit_parse.add_argument("course", type=str, help="Name of the course you want to open.")
-learnit_parse.add_argument("-a", "--add", action="store_true")
-learnit_parse.add_argument("-d", "--delete", action="store_true")
-
-
-git_parse = subparsers.add_parser(name="git",
-                                  help="Opens your GitHub account.")
-git_parse.add_argument("-a", "--add", action="store_true")
-git_parse.add_argument("-d", "--delete", action="store_true")
+    learnit_parse = subparsers.add_parser(name="learnit",
+                                help="Manages your LearnIT courses.")
+    learnit_parse.add_argument("course", type=str, help="Name of the course you want to open.")
+    learnit_parse.add_argument("-a", "--add", action="store_true")
+    learnit_parse.add_argument("-d", "--delete", action="store_true")
 
 
-args = parser.parse_args()
+    git_parse = subparsers.add_parser(name="git",
+                                    help="Opens your GitHub account.")
+    git_parse.add_argument("-a", "--add", action="store_true")
+    git_parse.add_argument("-d", "--delete", action="store_true")
 
-match args.subcommand:
-    case "init":
-        print(init())
-    case "learnit":
-        print(learnit(args))
-    case "git":
-        print(git(args))
-    case "canteen":
-        print(canteen(args))
+
+    args = parser.parse_args()
+
+    match args.subcommand:
+        case "init":
+            print(init())
+        case "learnit":
+            print(learnit(args))
+        case "git":
+            print(git(args))
+        case "canteen":
+            print(canteen())
